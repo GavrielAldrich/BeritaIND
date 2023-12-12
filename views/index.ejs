@@ -1,0 +1,109 @@
+<%- include ("partials/header.ejs") %>
+<div class="container-fluid bg-faded fh5co_padd_mediya padding_786">
+    <div class="container padding_786">
+        <nav class="navbar navbar-toggleable-md navbar-light ">
+            <button class="navbar-toggler navbar-toggler-right mt-3" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
+            <a class="navbar-brand" href="#"><img src="images/logo.png" alt="img" class="mobile_logo_width"/></a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href='/contact'>Contact <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton2" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Category <span class="sr-only">(current)</span></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_1">
+                            <% for(let loopedAPIindex in apiEndpoints.data) {%>
+                            <a class="dropdown-item" href="/category?id=<%= loopedAPIindex %>"><%= apiEndpoints.data[loopedAPIindex] %></a>
+                            <% } %>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+</header>
+
+
+<main>
+
+<!-- Getting the "/" route -->
+    <div class="container-fluid paddding mb-5">
+        <div class="row mx-0">
+            <div class="col-md-6 col-12 paddding animate-box" data-animate-effect="fadeIn">
+                <div class="fh5co_suceefh5co_height"><img src="<%= allContent[index].image.large %>" alt="img"/>
+                    <div class="fh5co_suceefh5co_height_position_absolute"></div>
+                    <div class="fh5co_suceefh5co_height_position_absolute_font">
+                        <div class=""><a href="<%= allContent[index].link %>" class="color_fff"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp;<%= allContent[index]  %>
+                        </a></div>
+                        <div class=""><a href="<%= allContent[index].link %>" class="fh5co_good_font"> <%= randDateContent %> </a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <!-- Loop the items, so theres only 4 items showed -->
+                    <% let newDate, dateObject, options, formattedDate; %>
+                    <% for( let i = 0; i < 4; i++ ) { %>
+                    <!-- Index Increment, so theres no chance for the content to be similar to the others -->
+                        <% index += 1 %>
+                    <!-- Converting the allContent.isoDate to Month Date, Year -->
+                    <!-- Why do we need to convert it inside the loop??? 
+                        : because everytime a new data is generated we need to generate the new data.date too -->
+                        <% newDate = allContent[index].isoDate; %>
+                        <% dateObject = new Date(newDate); %>
+                        <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+                        <% formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+
+                        <div class="col-md-6 col-6 paddding animate-box" data-animate-effect="fadeIn">
+                            <div class="fh5co_suceefh5co_height_2"><img src="<%= allContent[index].image.small %>" alt="img"/>
+                                <div class="fh5co_suceefh5co_height_position_absolute"></div>
+                                <div class="fh5co_suceefh5co_height_position_absolute_font_2">
+                                    <div class=""><a href="<%= allContent[index].link %>" class="color_fff"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp;<%= formattedDate %> </a></div>
+                                    <div class=""><a href="<%= allContent[index].link %>" class="fh5co_good_font_2"> <%= allContent[index].title %> </a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Getting "/internasional" route -->
+    <div class="container-fluid pb-4 pt-5">
+        <div class="container animate-box">
+            <div>
+                <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4">Internasional</div>
+            </div>
+            <div class="owl-carousel owl-theme" id="slider2">
+                <% for( let i = 0; i < 10; i++ ) { %>
+                <% newDate = internasionalContent[index2].isoDate; %>
+                <% dateObject = new Date(newDate); %>
+                <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+                <% formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+                
+                    <div class="item px-2">
+                        <div class="fh5co_hover_news_img">
+                            <div class="fh5co_news_img"><img src="<%= internasionalContent[index2].image.small %>" alt=""/></div>
+                            <div>
+                                <a href="<%= internasionalContent[index2].link %>" class="d-block fh5co_small_post_heading"><span class=""><%= internasionalContent[index2].title %></span></a>
+                                <div class="c_g"><i class="fa fa-clock-o"></i> <%= formattedDate %></div>
+                            </div>
+                        </div>
+                    </div>
+                    <% index2 += 1; %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include ("partials/footer.ejs") %>
