@@ -59,7 +59,6 @@ app.get("/", async (req, res) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate= dateObject.toLocaleDateString('en-US', options);
         res.render("index.ejs", {
-            apiEndpoints : API_endpoints,
             allContent: defaultData,
             nasionalContent : nasionalData,
             internasionalContent: internasionalData,
