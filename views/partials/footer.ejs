@@ -42,8 +42,8 @@
                 <div class="col-12 col-md-3 col-lg-2 text-left">
                     <div class="footer_main_title py-3"> Category</div>
                     <ul class="footer_menu">
-                        <% for(let loopedAPIfooter in apiEndpoints.data) {%>
-                        <li><a href="/category?id=<%= loopedAPIfooter %>" class=""><i class="fa fa-angle-right"></i>&nbsp;&nbsp; <%= apiEndpoints.data[loopedAPIfooter] %></a></li>
+                        <% for(loopedAPI in apiEndpoints.data) {%>
+                        <li><a href="/category?id=<%= loopedAPI %>" class=""><i class="fa fa-angle-right"></i>&nbsp;&nbsp; <%= apiEndpoints.data[loopedAPI] %></a></li>
                         <% } %>
                     </ul>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="footer_main_title py-3 "> Nasional</div>
                     <% for (let i = 0; i < 3; i++) { %>
                         <div class="footer_makes_sub_font"> Dec 31, 2016</div>
-                        <a href="#" class="footer_post pb-4"> <%= nasionalContent[index3++].title %> </a>
+                        <a href="<%= nasionalContent[index3].link %>" class="footer_post pb-4"> <%= nasionalContent[index3].title %> </a>
                         <% index3++ %>
                     <% } %>
                     <div class="footer_position_absolute"><img src="images/footer_sub_tipik.png" alt="img" class="width_footer_sub_img"/></div>

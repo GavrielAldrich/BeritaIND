@@ -18,9 +18,9 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton2" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Category <span class="sr-only">(current)</span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_1">
-                            
-                            <a class="dropdown-item" href="/category?id="></a>
-                           
+                            <% for(let loopedAPI in apiEndpoints.data) {%>
+                            <a class="dropdown-item" href="/category?id=<%= loopedAPI %>"><%= apiEndpoints.data[loopedAPI] %></a>
+                            <% } %>
                         </div>
                     </li>
                 </ul>
@@ -40,9 +40,9 @@
                 <div class="fh5co_suceefh5co_height"><img src="<%= allContent[index].image.large %>" alt="img"/>
                     <div class="fh5co_suceefh5co_height_position_absolute"></div>
                     <div class="fh5co_suceefh5co_height_position_absolute_font">
-                        <div class=""><a href="<%= allContent[index].link %>" class="color_fff"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp;<%= allContent[index]  %>
+                        <div class=""><a href="<%= allContent[index].link %>" class="color_fff"> <i class="fa fa-clock-o"></i>&nbsp;&nbsp;<%= randDateContent %>
                         </a></div>
-                        <div class=""><a href="<%= allContent[index].link %>" class="fh5co_good_font"> <%= randDateContent %> </a></div>
+                        <div class=""><a href="<%= allContent[index].link %>" class="fh5co_good_font"> <%= allContent[index].title %> </a></div>
                     </div>
                 </div>
             </div>

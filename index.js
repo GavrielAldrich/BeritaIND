@@ -49,16 +49,18 @@ const month = months[d.getMonth()];
 const thisYear = d.getFullYear();
 const dayNum = d.getDate();
 
-const randIndex = Math.floor(Math.random() * 95);
+
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
+        const randIndex = Math.floor(Math.random() * 95);
         // Converting the randContent isoDate to Month Date, Year
         const newDate = defaultData[randIndex].isoDate;
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate= dateObject.toLocaleDateString('en-US', options);
         res.render("index.ejs", {
+            apiEndpoints : API_endpoints,
             allContent: defaultData,
             nasionalContent : nasionalData,
             internasionalContent: internasionalData,
@@ -75,6 +77,7 @@ app.get("/", async (req, res) => {
     }
 });
 
+// GET: "/category"
 app.get("/category", async (req, res) => {
     try {
         const getDataID = req.query.id;
@@ -92,6 +95,7 @@ app.get("/category", async (req, res) => {
 // GET: "/contact"
 app.get("/contact", async (req, res) => {
     try {
+        const randIndex = Math.floor(Math.random() * 95);
         res.render("Contact_us.ejs", {
             apiEndpoints : API_endpoints,
             nasionalContent : nasionalData,
@@ -99,7 +103,6 @@ app.get("/contact", async (req, res) => {
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
         });
     } catch (error) {
-        console.log("Error, error type:", error.response.data);
         res.render("Contact_us.ejs", {
             nasionalContent : nasionalData,
             index3 : (randIndex - 3),
