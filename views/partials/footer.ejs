@@ -52,10 +52,11 @@
                 <div class="col-12 col-md-5 col-lg-3 position_footer_relative">
                     <div class="footer_main_title py-3 "> Nasional</div>
                     <% for (let i = 0; i < 3; i++) { %>
-                        <% newDate = nasionalContent[index3].isoDate; %>
-                        <% dateObject = new Date(newDate); %>
-                        <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
-                        <% formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+                        <% let newDate = nasionalContent[index3].isoDate; %>
+                        <% let dateObject = new Date(newDate); %>
+                        <% let options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+                        <% let formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+
                         <div class="footer_makes_sub_font"><%= formattedDate %></div>
                         <a href="<%= nasionalContent[index3].link %>" class="footer_post pb-4"> <%= nasionalContent[index3].title %> </a>
                         <% index3++ %>

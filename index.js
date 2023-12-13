@@ -8,6 +8,11 @@ const port = 3000;
 app.use(express.static("views"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.listen(port, () => 
+{ 
+    console.log(`Listening to port: ${port}`); 
+});
+
 // API Links endpoints
 const CNN_default = "https://berita-indo-api-next.vercel.app/api/cnn-news/";
 const API_endpoints = {
@@ -21,6 +26,10 @@ const API_endpoints = {
         "gaya-hidup" : "Gaya Hidup",
     }
 };
+const keys = Object.keys(API_endpoints.data);
+keys.forEach(key => {
+    // Loop to get the gaya-hidup instead of Gaya Hidup
+});
 
 const CNN_nasional = CNN_default + "nasional";
 const CNN_internasional = CNN_default + "internasional";
@@ -53,15 +62,18 @@ const dayNum = d.getDate();
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
+
         const randIndex = Math.floor(Math.random() * 95);
+        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
         const randIndex2 = Math.floor(Math.random() * 89);
         const randIndex3 = Math.floor(Math.random() * 96);
-        // Converting the randContent isoDate to Month Date, Year
+
+        // Converting the randContent isoDate to Month Date, Year.
         const newDate = defaultData[randIndex].isoDate;
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate = dateObject.toLocaleDateString('en-US', options);
-        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
+        
         res.render("index.ejs", {
             apiEndpoints : API_endpoints,
             allContent : defaultData,
@@ -79,12 +91,29 @@ app.get("/", async (req, res) => {
     }
 });
 
+// GET: "/contact"
+app.get("/contact", async (req, res) => {
+    try {
+        const getDataID = req.query.id;
+        const randIndex3 = Math.floor(Math.random() * 96);
+        res.render("Contact_us.ejs", {
+            apiEndpoints : API_endpoints,
+            nasionalContent : nasionalData,
+            index3 : randIndex3,
+            currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
+        });
+    } catch (error) {
+        res.render("Contact_us.ejs", {
+            currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
+        });
+    }
+});
+
 // GET: "/category"
 app.get("/category", async (req, res) => {
     try {
         const getDataID = req.query.id;
         const response = await axios.get(CNN_default+getDataID);
-        console.log (getDataID);
         res.render("category.ejs", {
             apiEndpoints : API_endpoints,
             dataID : getDataID,
@@ -92,27 +121,4 @@ app.get("/category", async (req, res) => {
     } catch (error) {
         console.log("Error, error type: "+ error.response.data)
     }
-});
-
-// GET: "/contact"
-app.get("/contact", async (req, res) => {
-    try {
-        const randIndex = Math.floor(Math.random() * 95);
-        res.render("Contact_us.ejs", {
-            apiEndpoints : API_endpoints,
-            nasionalContent : nasionalData,
-            index3 : (randIndex - 3),
-            currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
-        });
-    } catch (error) {
-        res.render("Contact_us.ejs", {
-            nasionalContent : nasionalData,
-            index3 : (randIndex - 3),
-            currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
-        });
-    }
-});
-
-app.listen(port, () => {
-    console.log(`Listening to port: ${port}`);
 });
