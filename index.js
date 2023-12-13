@@ -54,6 +54,8 @@ const dayNum = d.getDate();
 app.get("/", async (req, res) => {
     try {
         const randIndex = Math.floor(Math.random() * 95);
+        const randIndex2 = Math.floor(Math.random() * 89);
+        const randIndex3 = Math.floor(Math.random() * 96);
         // Converting the randContent isoDate to Month Date, Year
         const newDate = defaultData[randIndex].isoDate;
         const dateObject = new Date(newDate);
@@ -66,8 +68,8 @@ app.get("/", async (req, res) => {
             nasionalContent : nasionalData,
             internasionalContent : internasionalData,
             index : randIndex,
-            index2 : randIndex,
-            index3 : randIndex,
+            index2 : randIndex2,
+            index3 : randIndex3,
             randDateContent: randFormattedDate,
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
         });
