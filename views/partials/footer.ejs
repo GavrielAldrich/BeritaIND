@@ -6,7 +6,7 @@
                 <div class="col-12 spdp_right py-5"><img src="images/white_logo.png" alt="img" class="footer_logo"/></div>
                 <div class="clearfix"></div>
     
-                <!-- Centered About Section -->
+                <!-- About Section -->
                 <div class="col-12 col-md-3 col-lg-3">
                     <div class="footer_main_title py-3"> About</div>
                     <div class="footer_sub_about pb-3"> Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <!-- Category Section -->
                 <div class="col-12 col-md-3 col-lg-2 text-left">
                     <div class="footer_main_title py-3"> Category</div>
@@ -48,11 +48,15 @@
                     </ul>
                 </div>
     
-                <!-- Centered Most Viewed Posts Section -->
+                <!-- Nasional Posts Section -->
                 <div class="col-12 col-md-5 col-lg-3 position_footer_relative">
                     <div class="footer_main_title py-3 "> Nasional</div>
                     <% for (let i = 0; i < 3; i++) { %>
-                        <div class="footer_makes_sub_font"> Dec 31, 2016</div>
+                        <% newDate = nasionalContent[index3].isoDate; %>
+                        <% dateObject = new Date(newDate); %>
+                        <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+                        <% formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+                        <div class="footer_makes_sub_font"><%= formattedDate %></div>
                         <a href="<%= nasionalContent[index3].link %>" class="footer_post pb-4"> <%= nasionalContent[index3].title %> </a>
                         <% index3++ %>
                     <% } %>
@@ -67,7 +71,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 py-4 Reserved">
                     © Copyright 2018-2023, All rights reserved. <br> 
-                    Design by <a href="https://freehtml5.co" title="Free HTML5 Bootstrap templates">FreeHTML5.co</a>, API by <a href="https://github.com/satyawikananda/berita-indo-api" title="Berita Indonesia API">satyawikananda</a>.
+                    Design by <a href="https://freehtml5.co" title="Free HTML5 Bootstrap templates">FreeHTML5.co</a>, CNN API by <a href="https://github.com/satyawikananda/berita-indo-api" title="Berita Indonesia API">satyawikananda</a>.
                 </div>
                 <div class="col-12 col-md-6 spdp_right py-4">
                     <a href="/" class="footer_last_part_menu">Home</a>

@@ -58,16 +58,16 @@ app.get("/", async (req, res) => {
         const newDate = defaultData[randIndex].isoDate;
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const randFormattedDate= dateObject.toLocaleDateString('en-US', options);
+        const randFormattedDate = dateObject.toLocaleDateString('en-US', options);
+        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
         res.render("index.ejs", {
             apiEndpoints : API_endpoints,
-            allContent: defaultData,
+            allContent : defaultData,
             nasionalContent : nasionalData,
-            internasionalContent: internasionalData,
-            index: randIndex,
-        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
-            index2 : (randIndex - 6),
-            index3 : (randIndex - 3),
+            internasionalContent : internasionalData,
+            index : randIndex,
+            index2 : randIndex,
+            index3 : randIndex,
             randDateContent: randFormattedDate,
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
         });
