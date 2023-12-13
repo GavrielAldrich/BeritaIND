@@ -8,8 +8,7 @@ const port = 3000;
 app.use(express.static("views"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(port, () => 
-{ 
+app.listen(port, () => { 
     console.log(`Listening to port: ${port}`); 
 });
 
@@ -27,24 +26,15 @@ const API_endpoints = {
     }
 };
 const keys = Object.keys(API_endpoints.data);
-keys.forEach(key => {
-    // Loop to get the gaya-hidup instead of Gaya Hidup
-});
 
-const CNN_nasional = CNN_default + "nasional";
-const CNN_internasional = CNN_default + "internasional";
-const CNN_ekonomi = CNN_default + "ekonomi";
-const CNN_olahraga = CNN_default + "olahraga";
-const CNN_teknologi = CNN_default + "teknologi";
-const CNN_hiburan = CNN_default + "hiburan";
-const CNN_gayahidup = CNN_default + "gaya-hidup";
-
-// Use Promise.all to make all API requests get able.
-const [defaultResp, internasionalResp, nasionalResp] = await Promise.all([
+// Use Promise.all to make multiple API requests getable.
+const [defaultResp, nasionalResp, internasionalResp,
+    ekonomiResp, olahragaResp, teknologiResp,
+    hiburanResp, gayaHidupResp] = await Promise.all([
     axios.get(CNN_default),
-    axios.get(CNN_internasional),
-    axios.get(CNN_nasional),
+ ...keys.map(key => axios.get(CNN_default + key)),
 ]);
+
 const defaultData = defaultResp.data.data;
 const internasionalData = internasionalResp.data.data;
 const nasionalData = nasionalResp.data.data;
@@ -62,7 +52,6 @@ const dayNum = d.getDate();
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
-
         const randIndex = Math.floor(Math.random() * 95);
         //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
         const randIndex2 = Math.floor(Math.random() * 89);
