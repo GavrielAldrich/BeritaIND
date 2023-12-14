@@ -27,7 +27,7 @@ const API_endpoints = {
 };
 const keys = Object.keys(API_endpoints.data);
 
-// Use Promise.all to make multiple API requests getable.
+// Use Promise.all to make multiple API requests access able.
 const [defaultResp, nasionalResp, internasionalResp,
     ekonomiResp, olahragaResp, teknologiResp,
     hiburanResp, gayaHidupResp] = await Promise.all([
@@ -48,14 +48,13 @@ const month = months[d.getMonth()];
 const thisYear = d.getFullYear();
 const dayNum = d.getDate();
 
-
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
         const randIndex = Math.floor(Math.random() * 95);
-        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 data
-        const randIndex2 = Math.floor(Math.random() * 89);
-        const randIndex3 = Math.floor(Math.random() * 96);
+        //Make the index2 = 89, so we could get 99 of maximum index instead of 104 index
+        const randIndex2 = Math.floor(Math.random() * 89); // On EJS will be 89 + 10
+        const randIndex3 = Math.floor(Math.random() * 96); // On EJS will be 96 + 3 
 
         // Converting the randContent isoDate to Month Date, Year.
         const newDate = defaultData[randIndex].isoDate;
@@ -80,6 +79,23 @@ app.get("/", async (req, res) => {
     }
 });
 
+// GET: "/category"
+app.get("/category", async (req, res) => {
+    try {
+        const getID = req.query.id;
+        console.log(getID)
+        const randIndex3 = Math.floor(Math.random() * 96);
+        res.render("category.ejs", {
+            apiEndpoints : API_endpoints,
+            nasionalContent : nasionalData,
+            index3 : randIndex3,
+            currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
+        });
+    } catch (error) {
+        console.log("Error, error type: "+ error.response.data)
+    }
+});
+
 // GET: "/contact"
 app.get("/contact", async (req, res) => {
     try {
@@ -95,19 +111,5 @@ app.get("/contact", async (req, res) => {
         res.render("Contact_us.ejs", {
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
         });
-    }
-});
-
-// GET: "/category"
-app.get("/category", async (req, res) => {
-    try {
-        const getDataID = req.query.id;
-        const response = await axios.get(CNN_default+getDataID);
-        res.render("category.ejs", {
-            apiEndpoints : API_endpoints,
-            dataID : getDataID,
-        });
-    } catch (error) {
-        console.log("Error, error type: "+ error.response.data)
     }
 });
