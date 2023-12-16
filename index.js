@@ -31,13 +31,20 @@ const keys = Object.keys(API_endpoints.data);
 const [defaultResp, nasionalResp, internasionalResp,
     ekonomiResp, olahragaResp, teknologiResp,
     hiburanResp, gayaHidupResp] = await Promise.all([
+    // Only getting the "/" route.
     axios.get(CNN_default),
+    // Getting the nasional, internasional, ekonomi, etc route.
  ...keys.map(key => axios.get(CNN_default + key)),
 ]);
 
 const defaultData = defaultResp.data.data;
-const internasionalData = internasionalResp.data.data;
 const nasionalData = nasionalResp.data.data;
+const internasionalData = internasionalResp.data.data;
+// const ekonomiData = ekonomiResp.data.data;
+// const olahragaData = olahragaResp.data.data;
+// const teknologiData = teknologiResp.data.data;
+// const hiburanData = hiburanResp.data.data;
+// const gayaHidupData = gayaHidupResp.data.data;
 
 // Making a live date for top left Header
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -61,7 +68,7 @@ app.get("/", async (req, res) => {
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate = dateObject.toLocaleDateString('en-US', options);
-        
+
         res.render("index.ejs", {
             apiEndpoints : API_endpoints,
             allContent : defaultData,
@@ -83,13 +90,19 @@ app.get("/", async (req, res) => {
 app.get("/category", async (req, res) => {
     try {
         const getID = req.query.id;
-        console.log(getID)
+        const response = await axios.get(CNN_default+getID);
+        const result = response.data.data
+        const headerName = API_endpoints.data[getID]
         const randIndex3 = Math.floor(Math.random() * 96);
+        const totalDataIndex = Math.floor(Math.random() * 99);
+        
         res.render("category.ejs", {
             apiEndpoints : API_endpoints,
-            nasionalContent : nasionalData,
+            nasionalContent : nasionalData, // Getting nasional Data for the footer area
             index3 : randIndex3,
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
+            idHeader : headerName,
+            categoryContent : result,
         });
     } catch (error) {
         console.log("Error, error type: "+ error.response.data)
@@ -99,8 +112,10 @@ app.get("/category", async (req, res) => {
 // GET: "/contact"
 app.get("/contact", async (req, res) => {
     try {
+        const getDataValue = req.query.value;
         const getDataID = req.query.id;
         const randIndex3 = Math.floor(Math.random() * 96);
+        console.log(getDataValue)
         res.render("Contact_us.ejs", {
             apiEndpoints : API_endpoints,
             nasionalContent : nasionalData,
