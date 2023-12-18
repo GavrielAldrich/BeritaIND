@@ -54,7 +54,11 @@ const day = days[d.getDay()];
 const month = months[d.getMonth()];
 const thisYear = d.getFullYear();
 const dayNum = d.getDate();
+let categoryIndexArr = [0,5]
 
+function testClick(){
+    return console.log("Button clicked!");
+}
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
@@ -68,6 +72,8 @@ app.get("/", async (req, res) => {
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate = dateObject.toLocaleDateString('en-US', options);
+        const receivedData = req.body; // Access the data sent from the client
+        console.log("Received Data:", receivedData);
 
         res.render("index.ejs", {
             apiEndpoints : API_endpoints,
@@ -90,12 +96,43 @@ app.get("/", async (req, res) => {
 app.get("/category", async (req, res) => {
     try {
         const getID = req.query.id;
+        const getName = req.query.name;
         const response = await axios.get(CNN_default+getID);
         const result = response.data.data
+        const nextButtonLink = `/category?id=${getID}&name=btnNext`
+        const prevButtonLink = `/category?id=${getID}&name=btnPrev`
         const headerName = API_endpoints.data[getID]
         const randIndex3 = Math.floor(Math.random() * 96);
-        const totalDataIndex = Math.floor(Math.random() * 99);
-        
+        function nextPrevFunc(getName){
+            if(categoryIndexArr[0] > 0 && categoryIndexArr[1] < result.length){
+            switch (getName) {
+                case "btnNext":
+                    categoryIndexArr[0] = categoryIndexArr[0] + 5
+                    categoryIndexArr[1] = categoryIndexArr[1] + 5
+                    break;
+                case "btnPrev":
+                    categoryIndexArr[0] = categoryIndexArr[0] - 5
+                    categoryIndexArr[1] = categoryIndexArr[1] - 5
+                    break;
+                default:
+                    categoryIndexArr[0] = 0;
+                    categoryIndexArr[1] = 4;
+                    break;
+            }
+        }else{
+            switch (getName) {
+                case "btnNext":
+                    categoryIndexArr[0] = categoryIndexArr[0] + 5
+                    categoryIndexArr[1] = categoryIndexArr[1] + 5
+                    break;
+                case "btnPrev":
+                    categoryIndexArr[0] = 0
+                    categoryIndexArr[1] = 5
+                    break;
+            }
+        }
+    }
+        nextPrevFunc(getName);
         res.render("category.ejs", {
             apiEndpoints : API_endpoints,
             nasionalContent : nasionalData, // Getting nasional Data for the footer area
@@ -103,6 +140,11 @@ app.get("/category", async (req, res) => {
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
             idHeader : headerName,
             categoryContent : result,
+            linkID : getID,
+            nextLink : nextButtonLink,
+            prevLink : prevButtonLink,
+            prevNextIndexCounter : categoryIndexArr[0],
+            prevNextIndexLast : categoryIndexArr[1],
         });
     } catch (error) {
         console.log("Error, error type: "+ error.response.data)
@@ -112,10 +154,7 @@ app.get("/category", async (req, res) => {
 // GET: "/contact"
 app.get("/contact", async (req, res) => {
     try {
-        const getDataValue = req.query.value;
-        const getDataID = req.query.id;
         const randIndex3 = Math.floor(Math.random() * 96);
-        console.log(getDataValue)
         res.render("Contact_us.ejs", {
             apiEndpoints : API_endpoints,
             nasionalContent : nasionalData,
