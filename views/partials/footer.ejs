@@ -101,27 +101,5 @@
 <script src="js/jquery.waypoints.min.js"></script>
 <!-- Main -->
 <script src="js/main.js"></script>
-<script>
-    document.getElementById("sendDataButton").addEventListener("click", function() {
-        // Data to be sent to the server
-        const dataToSend = { firstName: "Gavriel", lastName: "Saerang" };
-    
-        // Make a POST request to the server
-        fetch("/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSend)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Server Response:", data);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-    });
-    </script>
 </body>
 </html>
