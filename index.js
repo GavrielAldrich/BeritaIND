@@ -28,9 +28,7 @@ const API_endpoints = {
 const keys = Object.keys(API_endpoints.data);
 
 // Use Promise.all to make multiple API requests access able.
-const [defaultResp, nasionalResp, internasionalResp,
-    ekonomiResp, olahragaResp, teknologiResp,
-    hiburanResp, gayaHidupResp] = await Promise.all([
+const [defaultResp, nasionalResp, internasionalResp] = await Promise.all([
     // Only getting the "/" route.
     axios.get(CNN_default),
     // Getting the nasional, internasional, ekonomi, etc route.
@@ -40,11 +38,6 @@ const [defaultResp, nasionalResp, internasionalResp,
 const defaultData = defaultResp.data.data;
 const nasionalData = nasionalResp.data.data;
 const internasionalData = internasionalResp.data.data;
-// const ekonomiData = ekonomiResp.data.data;
-// const olahragaData = olahragaResp.data.data;
-// const teknologiData = teknologiResp.data.data;
-// const hiburanData = hiburanResp.data.data;
-// const gayaHidupData = gayaHidupResp.data.data;
 
 // Making a live date for top left Header
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -56,9 +49,6 @@ const thisYear = d.getFullYear();
 const dayNum = d.getDate();
 let categoryIndexArr = [0,5]
 
-function testClick(){
-    return console.log("Button clicked!");
-}
 // GET: "/"
 app.get("/", async (req, res) => {
     try {
@@ -72,8 +62,6 @@ app.get("/", async (req, res) => {
         const dateObject = new Date(newDate);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const randFormattedDate = dateObject.toLocaleDateString('en-US', options);
-        const receivedData = req.body; // Access the data sent from the client
-        console.log("Received Data:", receivedData);
 
         res.render("index.ejs", {
             apiEndpoints : API_endpoints,
@@ -96,59 +84,71 @@ app.get("/", async (req, res) => {
 app.get("/category", async (req, res) => {
     try {
         const getID = req.query.id;
-        const getName = req.query.name;
         const response = await axios.get(CNN_default+getID);
         const result = response.data.data
-        const nextButtonLink = `/category?id=${getID}&name=btnNext`
-        const prevButtonLink = `/category?id=${getID}&name=btnPrev`
         const headerName = API_endpoints.data[getID]
         const randIndex3 = Math.floor(Math.random() * 96);
-        function nextPrevFunc(getName){
-            if(categoryIndexArr[0] > 0 && categoryIndexArr[1] < result.length){
-            switch (getName) {
-                case "btnNext":
-                    categoryIndexArr[0] = categoryIndexArr[0] + 5
-                    categoryIndexArr[1] = categoryIndexArr[1] + 5
-                    break;
-                case "btnPrev":
-                    categoryIndexArr[0] = categoryIndexArr[0] - 5
-                    categoryIndexArr[1] = categoryIndexArr[1] - 5
-                    break;
-                default:
-                    categoryIndexArr[0] = 0;
-                    categoryIndexArr[1] = 4;
-                    break;
-            }
-        }else{
-            switch (getName) {
-                case "btnNext":
-                    categoryIndexArr[0] = categoryIndexArr[0] + 5
-                    categoryIndexArr[1] = categoryIndexArr[1] + 5
-                    break;
-                case "btnPrev":
-                    categoryIndexArr[0] = 0
-                    categoryIndexArr[1] = 5
-                    break;
-            }
-        }
-    }
-        nextPrevFunc(getName);
         res.render("category.ejs", {
             apiEndpoints : API_endpoints,
             nasionalContent : nasionalData, // Getting nasional Data for the footer area
             index3 : randIndex3,
             currentDate: day + ", " + dayNum + " " + month + " " + thisYear,
             idHeader : headerName,
+            idEndpoints : getID,
             categoryContent : result,
-            linkID : getID,
-            nextLink : nextButtonLink,
-            prevLink : prevButtonLink,
-            prevNextIndexCounter : categoryIndexArr[0],
-            prevNextIndexLast : categoryIndexArr[1],
+            maxContent : categoryIndexArr[1],
+            minContent : categoryIndexArr[0],
         });
     } catch (error) {
-        console.log("Error, error type: "+ error.response.data)
+        console.log("Error, error type: "+ error)
     }
+});
+
+// POST : "/category"
+app.post("/category", async(req, res) =>{
+    const getID = req.query.id;
+    const getName = req.query.name;
+    //Detecting if button Prev already reach 0 data
+    //it will automatically redirect to the 0 data instead of -5
+    //also for the Next button, cannot go higher than 99 data.
+    if(categoryIndexArr[0] >= 0 && categoryIndexArr[1] < 95){
+        if(categoryIndexArr[0] == 0){
+        switch(getName){
+            case "next" :
+                categoryIndexArr[0] += 5 
+                categoryIndexArr[1] += 5 
+                break;
+            case "previous" :
+                categoryIndexArr[0] =  0
+                categoryIndexArr[1] =  5
+                break;
+            }
+        }
+        else if (categoryIndexArr[0] > 0){
+            switch(getName){
+                case "next" :
+                    categoryIndexArr[0] += 5 
+                    categoryIndexArr[1] += 5 
+                    break;
+                case "previous" :
+                    categoryIndexArr[0] -= 5 
+                    categoryIndexArr[1] -= 5 
+                    break;
+                }
+    }else{
+        switch(getName){
+            case "next" :
+                categoryIndexArr[0] = 96
+                categoryIndexArr[1] = 99 
+                break;
+            case "previous" :
+                categoryIndexArr[0] -= 5
+                categoryIndexArr[1] -= 5
+                break;
+            }
+    }
+    }
+    res.redirect(`/category?id=${getID}&name=${getName}`)
 });
 
 // GET: "/contact"

@@ -39,7 +39,7 @@
                         <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4"><%= idHeader %> News</div>
                     </div>
                     <% let newDate, dateObject, options, formattedDate; %>
-                    <% for(i = prevNextIndexCounter; i < prevNextIndexLast; i++) {%>
+                    <% for(i = minContent; i < maxContent; i++) {%>
                     <% newDate = categoryContent[i].isoDate; %>
                     <% dateObject = new Date(newDate); %>
                     <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
@@ -76,11 +76,9 @@
             </div>
             <div class="row mx-0">
                 <div class="col-12 text-center pb-4 pt-4">
-                <form method="post">
-                    <input type="submit" name="next" value="Next" formaction="/category" class="btn_mange_pagging">
-                    <input type="submit" name="previous" value="Prev.." formaction="/category" class="btn_mange_pagging">
-                    <a href="<%= prevLink %>" class="btn_mange_pagging"><i class="fa fa-long-arrow-left"></i>&nbsp;&nbsp; Previous</a>
-                    <a href="<%= nextLink %>" class="btn_mange_pagging">Next &nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i></a>
+                <form method="POST">
+                    <input formaction="/category?id=<%= idEndpoints %>&name=previous" type="submit" value="Prev.." class="btn_mange_pagging">
+                    <input formaction="/category?id=<%= idEndpoints %>&name=next" type="submit" value="Next" class="btn_mange_pagging">
                 </form>
                  </div>
             </div>
