@@ -1,4 +1,4 @@
-<%- include ("partials/header.ejs") %>
+<%- include("partials/header.ejs") %>
 <div class="container-fluid bg-faded fh5co_padd_mediya padding_786">
     <div class="container padding_786">
         <nav class="navbar navbar-toggleable-md navbar-light ">
@@ -18,7 +18,7 @@
                         <a class="nav-link dropdown-toggle active" href="#" id="dropdownMenuButton2" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Category <span class="sr-only">(current)</span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_1">
-                            <% for(let loopedAPI in apiEndpoints.data) {%>
+                            <% for(let loopedAPI in apiEndpoints.data) { %>
                             <a class="dropdown-item" href="/category?id=<%= loopedAPI %>"><%= apiEndpoints.data[loopedAPI] %></a>
                             <% } %>
                         </div>
@@ -27,7 +27,6 @@
             </div>
         </nav>
     </div>
-</div>
 </header>
 
 <main>
@@ -38,27 +37,26 @@
                     <div>
                         <div class="fh5co_heading fh5co_heading_border_bottom py-2 mb-4"><%= idHeader %> News</div>
                     </div>
-                    <% let newDate, dateObject, options, formattedDate; %>
-                    <% for(i = minContent; i < maxContent; i++) {%>
-                    <% newDate = categoryContent[i].isoDate; %>
-                    <% dateObject = new Date(newDate); %>
-                    <% options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
-                    <% formattedDate = dateObject.toLocaleDateString('en-US', options); %>
-                    <div class="row pb-4">
-                        <div class="col-md-5">
-                            <div class="fh5co_hover_news_img">
-                                <div class="fh5co_news_img">
-                                    <img src="<%= categoryContent[i].image.large %>" alt="<%= categoryContent[i].title %>"/>
+                    <% for (let i = 0; i < categoryContent.length; i++) { %>
+                        <% let newDate = categoryContent[i].isoDate; %>
+                        <% let dateObject = new Date(newDate); %>
+                        <% let options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+                        <% let formattedDate = dateObject.toLocaleDateString('en-US', options); %>
+                        <div class="row pb-4">
+                            <div class="col-md-5">
+                                <div class="fh5co_hover_news_img">
+                                    <div class="fh5co_news_img">
+                                        <img src="<%= categoryContent[i].image.large %>" alt="<%= categoryContent[i].title %>"/>
+                                    </div>
+                                    <div></div>
                                 </div>
-                                <div></div>
+                            </div>
+                            <div class="col-md-7">
+                                <a href="<%= categoryContent[i].link %>" class="fh5co_magna py-2"> <%= categoryContent[i].title %> </a> 
+                                <a href="<%= categoryContent[i].link %>" class="fh5co_mini_time py-3"> <%= formattedDate %> </a>
+                                <div class="fh5co_consectetur"> <%= categoryContent[i].contentSnippet %> </div>
                             </div>
                         </div>
-                        <div class="col-md-7">
-                            <a href="<%= categoryContent[i].link %>" class="fh5co_magna py-2"> <%= categoryContent[i].title %> </a> <a href="<%= categoryContent[i].link %>" class="fh5co_mini_time py-3"> <%= formattedDate %> </a>
-                            <div class="fh5co_consectetur"> <%= categoryContent[i].contentSnippet %>
-                            </div>
-                        </div>
-                    </div>
                     <% } %>
                 </div>
                 <div class="col-md-3 animate-box" data-animate-effect="fadeInRight">
@@ -67,23 +65,21 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="fh5co_tags_all">
-                        <%for (let loopedAPI in apiEndpoints.data) {%>
-                        <% const currentAPI = loopedAPI;%>
-                          <a href="/category?id=<%= loopedAPI %>" class="fh5co_tagg"><%= apiEndpoints.data[loopedAPI] %></a>
+                        <% for (let loopedAPI in apiEndpoints.data) { %>
+                        <a href="/category?id=<%= loopedAPI %>" class="fh5co_tagg"><%= apiEndpoints.data[loopedAPI] %></a>
                         <% } %>
                     </div>
                 </div>
             </div>
             <div class="row mx-0">
                 <div class="col-12 text-center pb-4 pt-4">
-                <form method="POST">
-                    <input formaction="/category?id=<%= idEndpoints %>&name=previous" type="submit" value="Prev.." class="btn_mange_pagging">
-                    <input formaction="/category?id=<%= idEndpoints %>&name=next" type="submit" value="Next" class="btn_mange_pagging">
+                <form method="GET">
+                    <input formaction="/category?id=<%= idEndpoints %>&page=<%= pageNum - 1 %>" type="submit" value="Prev.." class="btn_mange_pagging" <%= pageNum === 0 ? 'disabled' : '' %> >
+                    <input formaction="/category?id=<%= idEndpoints %>&page=<%= pageNum + 1 %>" type="submit" value="Next" class="btn_mange_pagging">
                 </form>
                  </div>
             </div>
         </div>
     </div>
-
 </main>
-<%- include ("partials/footer.ejs") %>
+<%- include("partials/footer.ejs") %>

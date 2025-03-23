@@ -18,8 +18,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton2" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Category <span class="sr-only">(current)</span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_1">
-                            <% for(let loopedAPI in apiEndpoints.data) {%>
-                            <a class="dropdown-item" href="/category?id=<%= loopedAPI %>"><%= apiEndpoints.data[loopedAPI] %></a>
+                            <% for(let loopedAPI in apiEndpoints) {%>
+                            <a class="dropdown-item" href="/category?id=<%= loopedAPI %>"><%= apiEndpoints[loopedAPI] %></a>
                             <% } %>
                         </div>
                     </li>
