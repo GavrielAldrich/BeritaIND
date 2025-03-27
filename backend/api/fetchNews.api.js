@@ -21,7 +21,7 @@ class FetchNews {
 
     const [allCNN, nasionalCNN, internasionalCNN] = await Promise.all([
       axios.get(this.CNN_API).catch((err) => {
-        console.error("Route:", CNN_API);
+        console.error("Route:", this.CNN_API);
         throw Error("Error when fetching all CNN API.");
       }),
 

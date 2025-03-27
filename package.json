@@ -11,8 +11,7 @@
     "start": "node backend/app.js",
     "build": "nodemon backend/app.js",
     "dev": "nodemon backend/app.js",
-    "vercel-build": "echo hello",
-    "vercel-dev": "vercel dev --port 3001"
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
