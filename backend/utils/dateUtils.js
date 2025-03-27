@@ -1,5 +1,5 @@
-const getCurrentDateDetails = () => {
-  const months = [
+const getCurrentDateDetails = {
+  months: [
     "January",
     "February",
     "March",
@@ -12,8 +12,8 @@ const getCurrentDateDetails = () => {
     "October",
     "November",
     "December",
-  ];
-  const days = [
+  ],
+  days: [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -21,13 +21,15 @@ const getCurrentDateDetails = () => {
     "Thursday",
     "Friday",
     "Saturday",
-  ];
-  const d = new Date();
-  const day = days[d.getDay()];
-  const month = months[d.getMonth()];
-  const thisYear = d.getFullYear();
-  const dayNum = d.getDate();
-  return { day, month, thisYear, dayNum };
+  ],
+  get: function () {
+    const d = new Date();
+    const day = this.days[d.getDay()];
+    const month = this.months[d.getMonth()];
+    const thisYear = d.getFullYear();
+    const dayNum = d.getDate();
+    return { day, month, thisYear, dayNum };
+  },
 };
 
 export default getCurrentDateDetails;

@@ -3,40 +3,46 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// API Links endpoints
-const CNN_API = process.env.API;
+class FetchNews {
+  constructor() {
+    this.CNN_API = process.env.API;
+    this.API_ENDPOINTS = {
+      nasional: "Nasional",
+      internasional: "Internasional",
+      ekonomi: "Ekonomi",
+      olahraga: "Olahraga",
+      teknologi: "Teknologi",
+      hiburan: "Hiburan",
+      "gaya-hidup": "Gaya Hidup",
+    };
+  }
+  async allNews() {
+    const keys = Object.keys(this.API_ENDPOINTS);
 
-const API_ENDPOINTS = {
-  nasional: "Nasional",
-  internasional: "Internasional",
-  ekonomi: "Ekonomi",
-  olahraga: "Olahraga",
-  teknologi: "Teknologi",
-  hiburan: "Hiburan",
-  "gaya-hidup": "Gaya Hidup",
-};
-const keys = Object.keys(API_ENDPOINTS);
+    const [allCNN, nasionalCNN, internasionalCNN] = await Promise.all([
+      axios.get(this.CNN_API).catch((err) => {
+        console.error("Route:", CNN_API);
+        throw Error("Error when fetching all CNN API.");
+      }),
 
-// Use Promise.all to make multiple API requests accessible.
-const fetchNews = async () => {
-  const [allCNN, nasionalCNN, internasionalCNN] = await Promise.all([
-    axios.get(CNN_API).catch((err) => {
-      console.error("Route:", CNN_API);
-      throw Error("Error when fetching all CNN API.");
-    }),
-    ...keys.map((key) =>
-      axios.get(CNN_API + key).catch((err) => {
-        console.error("Route:", CNN_API, key);
-        throw Error("Error when fetching CNN API based on endpoints");
-      })
-    ),
-  ]);
+      ...keys.map((key) =>
+        axios.get(this.CNN_API + key).catch((err) => {
+          console.error("Route:", this.CNN_API, key);
+          throw Error("Error when fetching CNN API with endpoints");
+        })
+      ),
+    ]);
 
-  return {
-    defaultData: allCNN.data.data,
-    nasionalData: nasionalCNN.data.data,
-    internasionalData: internasionalCNN.data.data,
-  };
-};
+    return {
+      defaultData: allCNN.data.data,
+      nasionalData: nasionalCNN.data.data,
+      internasionalData: internasionalCNN.data.data,
+    };
+  }
+  async filteredNews(q) {
+    const filteredCNN = axios.get(this.CNN_API + q);
+    return filteredCNN;
+  }
+}
 
-export { fetchNews, API_ENDPOINTS };
+export default new FetchNews();

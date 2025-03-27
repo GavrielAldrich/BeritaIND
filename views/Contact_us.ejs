@@ -5,7 +5,7 @@
             <button class="navbar-toggler navbar-toggler-right mt-3" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
-            <a class="navbar-brand" href="#"><img src="images/logo.png" alt="img" class="mobile_logo_width"/></a>
+            <a class="navbar-brand" href="#"><img src="/images/logo.png" alt="img" class="mobile_logo_width"/></a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item ">
@@ -18,8 +18,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton2" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Category <span class="sr-only">(current)</span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_1">
-                            <% for(let loopedAPI in apiEndpoints.data) {%>
-                                <a class="dropdown-item" href="/category?id=<%= loopedAPI %>"><%= apiEndpoints.data[loopedAPI] %></a>
+                            <% for(let loopedAPI in apiEndpoints) {%>
+                                <a class="dropdown-item" href="/category/<%= loopedAPI %>"><%= apiEndpoints[loopedAPI] %></a>
                                 <% } %>
                         </div>
                     </li>

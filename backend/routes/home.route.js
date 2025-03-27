@@ -1,10 +1,12 @@
-import { fetchNews, API_ENDPOINTS } from "../api/fetchNews.api.js";
+import fetchNews from "../api/fetchNews.api.js";
 import getCurrentDateDetails from "../utils/dateUtils.js";
 
 // Home Routes
-const homeRouter = async (req, res) => {
+export default async function homeRouter(req, res) {
   try {
-    const { defaultData, nasionalData, internasionalData } = await fetchNews();
+    const { defaultData, nasionalData, internasionalData } =
+      await fetchNews.allNews();
+
     const randIndex = Math.floor(Math.random() * 95);
     const randIndex2 = Math.floor(Math.random() * 89);
     const randIndex3 = Math.floor(Math.random() * 96);
@@ -14,12 +16,10 @@ const homeRouter = async (req, res) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     const randFormattedDate = dateObject.toLocaleDateString("en-US", options);
 
-    const { day, month, thisYear, dayNum } = getCurrentDateDetails();
+    const { day, month, thisYear, dayNum } = getCurrentDateDetails.get();
 
-    console.log(API_ENDPOINTS)
-
-    res.render("index.ejs", {
-      apiEndpoints: API_ENDPOINTS,
+    return res.render("index.ejs", {
+      apiEndpoints: fetchNews.API_ENDPOINTS,
       allContent: defaultData,
       nasionalContent: nasionalData,
       internasionalContent: internasionalData,
@@ -31,10 +31,7 @@ const homeRouter = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
-    console.log("Error on /home");
-    res.status(500).send("Error on server, status 500");
+    console.log("Error on /");
+    return res.status(500).send("Error 500 /");
   }
-};
-
-export default homeRouter;
+}

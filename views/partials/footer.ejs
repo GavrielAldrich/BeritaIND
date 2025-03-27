@@ -3,7 +3,7 @@
         <div class="container animate-box">
             <div class="row justify-content-center">
                 <!-- Logo -->
-                <div class="col-12 spdp_right py-5"><img src="images/white_logo.png" alt="img" class="footer_logo"/></div>
+                <div class="col-12 spdp_right py-5"><img src="/images/white_logo.png" alt="img" class="footer_logo"/></div>
                 <div class="clearfix"></div>
     
                 <!-- About Section -->
@@ -40,7 +40,7 @@
                     <div class="footer_main_title py-3"> Category</div>
                     <ul class="footer_menu">
                         <% for(loopedAPI in apiEndpoints) {%>
-                        <li><a href="/category?id=<%= loopedAPI %>" class=""><i class="fa fa-angle-right"></i>&nbsp;&nbsp; <%= apiEndpoints[loopedAPI] %></a></li>
+                        <li><a href="/category/<%= loopedAPI %>" class=""><i class="fa fa-angle-right"></i>&nbsp;&nbsp; <%= apiEndpoints[loopedAPI] %></a></li>
                         <% } %>
                     </ul>
                 </div>
@@ -58,7 +58,7 @@
                         <a href="<%= nasionalContent[index3].link %>" class="footer_post pb-4"> <%= nasionalContent[index3].title %> </a>
                         <% index3++ %>
                     <% } %>
-                    <div class="footer_position_absolute"><img src="images/footer_sub_tipik.png" alt="img" class="width_footer_sub_img"/></div>
+                    <div class="footer_position_absolute"><img src="/images/footer_sub_tipik.png" alt="img" class="width_footer_sub_img"/></div>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
 </footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
 <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
         integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
@@ -95,8 +95,8 @@
         integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
         crossorigin="anonymous"></script>
 <!-- Waypoints -->
-<script src="js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
 <!-- Main -->
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
