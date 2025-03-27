@@ -11,10 +11,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+let PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(express.static(path.join(__dirname, "../views"))); // Changed from ../views
+app.use(express.static(path.join(__dirname, "../views")));
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,14 +25,49 @@ app.use(router);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send("Something broke!");
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).send('Page not found');
+  res.status(404).send("Page not found");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+const startServer = () => {
+  return new Promise((resolve, reject) => {
+    const server = app
+      .listen(PORT)
+      .on("listening", () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+        resolve(server);
+      })
+      .on("error", (err) => {
+        if (err.code === "EADDRINUSE") {
+          console.log(`Port ${PORT} is busy, trying port ${PORT + 1}`);
+          PORT++;
+          server.close();
+          resolve(startServer());
+        } else {
+          reject(err);
+        }
+      });
+
+    // Graceful shutdown
+    process.on("SIGTERM", () => {
+      server.close(() => {
+        console.log("Server closed");
+        process.exit(0);
+      });
+    });
+  });
+};
+
+// Start server only if not in Vercel environment
+if (process.env.VERCEL !== '1') {
+  startServer().catch((err) => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  });
+}
+
+export default app;
