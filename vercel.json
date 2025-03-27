@@ -8,8 +8,23 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/app.js"
+      "src": "/images/(.*)",
+      "dest": "/backend/views/images/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/backend/views/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/backend/views/js/$1"
+    },
+    {
+      "src": "/views/(.*)",
+      "dest": "/backend/views/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
