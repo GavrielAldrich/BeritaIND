@@ -4,6 +4,6 @@ import ContactController from "../controller/contact.controller.js";
 
 const router = Router();
 
-router.get("/", AsyncHandler.wrap(ContactController.index));
+router.get("/", AsyncHandler.wrap(ContactController.renderContact));
 
 export default router;

@@ -1,27 +1,17 @@
 import fetchNews from "../api/fetchNews.api.js";
 import getCurrentDateDetails from "../utils/dateUtils.js";
+import cache from "../utils/cache.js";
 
 class CategoryRouter {
-  name = async (req, res) => {
-    return this.renderCategory(req, res);
-  };
-
-  page = async (req, res) => {
-    return this.renderCategory(req, res);
-  };
-
   async renderCategory(req, res) {
     try {
       const name = req.params.name;
       const pageNum = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-      if (pageNum < 1) {
-        return res.redirect(`/category/${name}?page=1`);
-      }
 
       // Fetch data
       const { nasionalData } = await fetchNews.allNews();
       const response = await fetchNews.filteredNews(name);
-      const result = response.data.data;
+      const result = response;
       const headerName = fetchNews.API_ENDPOINTS[name];
       const randIndex3 = Math.floor(Math.random() * 96);
 
@@ -31,11 +21,6 @@ class CategoryRouter {
       const totalPages = Math.ceil(totalItems / pageSize);
       const startIndex = (pageNum - 1) * pageSize;
       const endIndex = Math.min(startIndex + pageSize, totalItems);
-
-      // Validate page number
-      if (pageNum > totalPages) {
-        return res.redirect(`/category/${name}?page=${totalPages}`);
-      }
 
       // Current date
       const { day, month, thisYear, dayNum } = getCurrentDateDetails.get();

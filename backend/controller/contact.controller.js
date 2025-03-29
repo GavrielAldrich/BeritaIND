@@ -1,9 +1,10 @@
 import fetchNews from "../api/fetchNews.api.js";
 import getCurrentDateDetails from "../utils/dateUtils.js";
+import cache from "../utils/cache.js";
 
 class ContactController {
   constructor() {
-    this.index = this.index.bind(this);
+    this.renderContact = this.renderContact.bind(this);
     this.generateRandomIndex = this.generateRandomIndex.bind(this);
     this.getCurrentDate = this.getCurrentDate.bind(this);
   }
@@ -27,20 +28,28 @@ class ContactController {
     }
   }
 
-  async index(req, res) {
+  async renderContact(req, res) {
     try {
+      var cachedContactData = cache.get("contactData");
+      if (cachedContactData) {
+        return res.render("contact_us.ejs", cachedContactData);
+      }
+
       const { nasionalData } = await fetchNews.allNews();
 
       if (!nasionalData || !nasionalData.length) {
         throw new Error("No data received from news API");
       }
 
-      return res.render("contact_us.ejs", {
+      const contactData = {
         apiEndpoints: fetchNews.API_ENDPOINTS,
         nasionalContent: nasionalData,
         index3: this.generateRandomIndex(),
         currentDate: this.getCurrentDate(),
-      });
+      };
+
+      cache.set("contactData", contactData);
+      return res.render("contact_us.ejs", contactData);
     } catch (error) {
       console.error("Error in contact route:", error);
       return res.status(500).send("Error 500 /contact");

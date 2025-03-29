@@ -1,5 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import cache from "../utils/cache.js";
+import { clearCache } from "ejs";
 
 dotenv.config();
 
@@ -15,33 +17,70 @@ class FetchNews {
       hiburan: "Hiburan",
       "gaya-hidup": "Gaya Hidup",
     };
+    this.fetchWithCache = this.fetchWithCache.bind(this);
   }
+
+  async fetchWithCache(key, url) {
+    const cachedData = cache.get(key);
+    if (cachedData) {
+      // console.log("A cached data found");
+      return cachedData;
+    }
+
+    try {
+      const response = await axios.get(url);
+      // console.log(`Setting new cache: ${key}`);
+      cache.set(key, response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Error while fetching: ${url}`);
+    }
+  }
+
+  async filteredNews(name) {
+    const result = await this.fetchWithCache(
+      `news_${name}`,
+      `${this.CNN_API}${name}`
+    );
+    return result;
+  }
+
   async allNews() {
-    const keys = Object.keys(this.API_ENDPOINTS);
+    try {
+      const cacheKey = "allNewsData";
+      const allCachedData = cache.get(cacheKey);
+      if (allCachedData) {
+        // console.log("All news cached data found.");
+        return allCachedData;
+      }
 
-    const [allCNN, nasionalCNN, internasionalCNN] = await Promise.all([
-      axios.get(this.CNN_API).catch((err) => {
-        console.error("Route:", this.CNN_API);
-        throw Error("Error when fetching all CNN API.");
-      }),
+      // Fetch all news
+      const allData = await this.fetchWithCache("defaultData", this.CNN_API);
 
-      ...keys.map((key) =>
-        axios.get(this.CNN_API + key).catch((err) => {
-          console.error("Route:", this.CNN_API, key);
-          throw Error("Error when fetching CNN API with endpoints");
-        })
-      ),
-    ]);
+      // Fetch based on category
+      const categoryKeys = Object.keys(this.API_ENDPOINTS);
+      const categoryRequests = categoryKeys.map((key) => {
+        const url = this.CNN_API + key;
+        return this.fetchWithCache(key, url);
+      });
 
-    return {
-      defaultData: allCNN.data.data,
-      nasionalData: nasionalCNN.data.data,
-      internasionalData: internasionalCNN.data.data,
-    };
-  }
-  async filteredNews(q) {
-    const filteredCNN = axios.get(this.CNN_API + q);
-    return filteredCNN;
+      const [nasionalData, internasionalData, ...otherCategories] =
+        await Promise.all(categoryRequests);
+
+      const allNewsData = {
+        defaultData: allData,
+        nasionalData,
+        internasionalData,
+        otherCategories,
+      };
+
+      cache.set(cacheKey, allNewsData);
+      return allNewsData;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error while fetcing all news API");
+    }
   }
 }
 

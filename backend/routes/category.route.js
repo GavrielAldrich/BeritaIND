@@ -4,6 +4,6 @@ import CategoryRouter from "../controller/category.controller.js";
 
 const router = Router();
 
-router.get("/:name", AsyncHandler.wrap(CategoryRouter.name));
+router.get("/:name", AsyncHandler.wrap(CategoryRouter.renderCategory));
 
 export default router;
