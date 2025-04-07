@@ -19,12 +19,11 @@ app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Routes
 app.use(router);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error("Global Error:", err);
   res.status(500).send("Something went wrong!");
 });
 
@@ -42,6 +41,7 @@ const startServer = () => {
         resolve(server);
       })
       .on("error", (err) => {
+        // Checking if PORT available
         if (err.code === "EADDRINUSE") {
           console.log(`Port ${PORT} is busy, trying port ${PORT + 1}`);
           PORT++;
@@ -52,7 +52,7 @@ const startServer = () => {
         }
       });
 
-    // Graceful shutdown
+
     process.on("SIGTERM", () => {
       server.close(() => {
         console.log("Server closed");

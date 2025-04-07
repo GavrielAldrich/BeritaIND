@@ -4,7 +4,6 @@ import cache from "../utils/cache.js";
 
 class HomeController {
   constructor() {
-    // Bind methods to preserve 'this' context
     this.renderHome = this.renderHome.bind(this);
     this.generateRandomIndices = this.generateRandomIndices.bind(this);
     this.formatDate = this.formatDate.bind(this);
@@ -57,35 +56,30 @@ class HomeController {
   }
 
   async renderHome(req, res) {
-    try {
-      var cachedHomeData = cache.get("homeData");
-      if (cachedHomeData) {
-        return res.render("index.ejs", cachedHomeData);
-      }
-
-      const { defaultData, nasionalData, internasionalData } =
-        await fetchNews.allNews();
-
-      const randomIndices = this.generateRandomIndices();
-      const formattedDate = this.formatDate(defaultData[randomIndices.index]);
-      const currentDate = this.getCurrentDate();
-
-      const homeData = {
-        apiEndpoints: fetchNews.API_ENDPOINTS,
-        allContent: defaultData,
-        nasionalContent: nasionalData,
-        internasionalContent: internasionalData,
-        ...randomIndices,
-        randDateContent: formattedDate,
-        currentDate,
-      };
-
-      cache.set("homeData", homeData);
-      return res.render("index.ejs", homeData);
-    } catch (error) {
-      console.error("Error in index route:", error);
-      return res.status(500).send("Error 500 /");
+    var cachedHomeData = cache.get("homeData");
+    if (cachedHomeData) {
+      return res.render("index.ejs", cachedHomeData);
     }
+
+    const { defaultData, nasionalData, internasionalData } =
+      await fetchNews.allNews();
+
+    const randomIndices = this.generateRandomIndices();
+    const formattedDate = this.formatDate(defaultData[randomIndices.index]);
+    const currentDate = this.getCurrentDate();
+
+    const homeData = {
+      apiEndpoints: fetchNews.API_ENDPOINTS,
+      allContent: defaultData,
+      nasionalContent: nasionalData,
+      internasionalContent: internasionalData,
+      ...randomIndices,
+      randDateContent: formattedDate,
+      currentDate,
+    };
+
+    cache.set("homeData", homeData);
+    return res.render("index.ejs", homeData);
   }
 }
 

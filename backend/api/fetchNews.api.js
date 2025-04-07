@@ -1,7 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import cache from "../utils/cache.js";
-import { clearCache } from "ejs";
 
 dotenv.config();
 
@@ -23,13 +22,11 @@ class FetchNews {
   async fetchWithCache(key, url) {
     const cachedData = cache.get(key);
     if (cachedData) {
-      // console.log("A cached data found");
       return cachedData;
     }
 
     try {
       const response = await axios.get(url);
-      // console.log(`Setting new cache: ${key}`);
       cache.set(key, response.data.data);
       return response.data.data;
     } catch (error) {
@@ -51,7 +48,6 @@ class FetchNews {
       const cacheKey = "allNewsData";
       const allCachedData = cache.get(cacheKey);
       if (allCachedData) {
-        // console.log("All news cached data found.");
         return allCachedData;
       }
 
