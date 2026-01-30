@@ -1,5 +1,5 @@
 {
-  "nodeVersion": "22.x",
+  "version": "22.x",
   "builds": [
     {
       "src": "backend/app.js",
